@@ -1,0 +1,19 @@
+{
+  "servers": [
+    {
+      "name": "HiveGames",
+      "address": "geo.hivebedrock.network:19132",
+      "image": "https://play.hivemc.com/img/hive.png"
+    },
+    {
+      "name": "Cubecraft",
+      "address": "play.cubecraft.net:19132",
+      "image": ""
+    },
+    {
+      "name": "Mineplex",
+      "address": "pe.mineplex.com:19132",
+      "image": ""
+    }
+  ]
+}
