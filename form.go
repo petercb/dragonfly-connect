@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log/slog"
 
 	"github.com/df-mc/dragonfly/server/player"
@@ -22,6 +23,7 @@ func (f ServerListForm) Submit(submitter form.Submitter, pressed form.Button, tx
 				f.log.Info("Transferring player", "player", p.Name(), "target", s.Name, "address", s.Address)
 				if err := p.Transfer(s.Address); err != nil {
 					f.log.Error("Transfer failed", "player", p.Name(), "err", err)
+					p.Disconnect(fmt.Sprintf("Connection failed: %v", err))
 				}
 				return
 			}
