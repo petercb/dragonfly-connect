@@ -1,5 +1,6 @@
 version: 2.1
 orbs:
+  docker: circleci/docker@3
   go: circleci/go@3
 jobs:
   test:
@@ -39,6 +40,11 @@ jobs:
       name: go/default
       tag: '1.26'
     steps:
+      - setup_remote_docker
+      - docker/check:
+          docker_password: GITHUB_TOKEN
+          docker_username: CIRCLE_PROJECT_USERNAME
+          registry: ghcr.io
       - checkout
       - go/install-goreleaser
       - go/goreleaser-release:
@@ -59,7 +65,6 @@ workflows:
               ignore: /.*/
           requires:
             - test
-
   tags:
     jobs:
       - go-build-release:
