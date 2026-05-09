@@ -26,18 +26,22 @@ jobs:
     steps:
       - checkout
       - go/mod-download
-      - run:
-          name: Run golangci-lint
-          command: |
-            curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | \
-              sh -s -- -b $(go env GOPATH)/bin v1.64.5
-            $(go env GOPATH)/bin/golangci-lint run
       - go/test:
           covermode: atomic
           failfast: true
           race: true
       - run: go build ./
         # - run: ./dragonfly-connect
+  go-build-release:
+    executor:
+      name: go/default
+      tag: '1.26'
+    steps:
+      - checkout
+      - go/install-goreleaser
+      - go/goreleaser-release:
+          publish-release: true
+          validate-yaml: true
 workflows:
   continuous:
     jobs:
@@ -50,3 +54,11 @@ workflows:
                 - main
           requires:
             - test
+  tags:
+    jobs:
+      - go-build-release:
+          filters: &filter-tags
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
