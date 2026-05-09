@@ -19,29 +19,20 @@ builds:
     goarch:
       - amd64
       - arm64
-dockers:
-  - image_templates:
-      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-amd64"
-    use: buildx
-    dockerfile: Dockerfile
-    build_flag_templates:
-      - "--platform=linux/amd64"
-  - image_templates:
-      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-arm64"
-    use: buildx
-    dockerfile: Dockerfile
-    build_flag_templates:
-      - "--platform=linux/arm64"
+dockers_v2:
+  - images:
+      - "ghcr.io/petercb/dragonfly-connect"
+    tags:
+      - "{{ .Version }}"
+    extra_files:
+      - servers.json
+    labels:
+      "org.opencontainers.image.created": "{{.Date}}"
+      "org.opencontainers.image.name": "{{.ProjectName}}"
+      "org.opencontainers.image.revision": "{{.FullCommit}}"
+      "org.opencontainers.image.version": "{{.Version}}"
+      "org.opencontainers.image.source": "{{.GitURL}}"
 
-docker_manifests:
-  - name_template: ghcr.io/petercb/dragonfly-connect:{{ .Tag }}
-    image_templates:
-      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-amd64"
-      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-arm64"
-  - name_template: ghcr.io/petercb/dragonfly-connect:latest
-    image_templates:
-      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-amd64"
-      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-arm64"
 archives:
   - formats: [tar.gz]
     name_template: >-
