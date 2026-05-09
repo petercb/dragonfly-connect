@@ -9,6 +9,7 @@
 
 ## Pending
 - TASK-002: Improve Error Handling & Environment Configuration.
+- TASK-004: CI/CD & Dependabot Configuration.
 
 ## Known Issues
 - `srv.Listen()` error ignored.

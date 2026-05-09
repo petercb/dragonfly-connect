@@ -35,3 +35,15 @@
 - **Acceptance Criteria**:
     - `docs/agent_rules.md` created.
     - `docs/technical.md` and `tasks/tasks.md` updated to reflect these rules.
+
+## TASK-004: CI/CD & Dependabot Configuration
+- **Status**: Planned
+- **Priority**: High
+- **Description**: Ensure Goreleaser runs on tagged builds and configure Dependabot to track Dragonfly's master branch.
+- **Dependencies**: TASK-001
+- **Checklist**:
+    - [ ] Create feature branch `feature/task-004-ci-cd-dependabot` from `main`.
+    - [ ] Create `.github/dependabot.yml`.
+    - [ ] Verify `.circleci/config.yml` is correctly configured for Goreleaser via semantic-release.
+    - [ ] Run `golangci-lint` (as per rules).
+    - [ ] Commit and notify user.
