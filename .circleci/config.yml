@@ -48,20 +48,9 @@ jobs:
       - run:
           name: Install buildx
           command: |
-            BUILDX_BINARY_URL="https://github.com/docker/buildx/releases/download/v0.33.0/buildx-v0.33.0.linux-amd64"
-
-            curl --output docker-buildx \
-              --silent --show-error --location --fail --retry 3 \
-              "$BUILDX_BINARY_URL"
-
-            mkdir -p ~/.docker/cli-plugins
-
-            mv docker-buildx ~/.docker/cli-plugins/
-            chmod a+x ~/.docker/cli-plugins/docker-buildx
-
-            docker buildx install
-            # Run binfmt
-            docker run --rm --privileged tonistiigi/binfmt:latest --install "linux/amd64,linux/arm64"
+            docker run --rm --privileged tonistiigi/binfmt:latest --install all
+            docker buildx create --name goreleaser --use
+            docker buildx inspect --bootstrap
       - checkout
       - go/install-goreleaser
       - go/goreleaser-release:
