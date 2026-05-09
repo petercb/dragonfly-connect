@@ -1,0 +1,52 @@
+version: 2.1
+orbs:
+  go: circleci/go@3
+jobs:
+  release:
+    executor:
+      name: go/default
+      tag: '1.26'
+    steps:
+      - checkout
+      - run:
+          name: go-semantic-release
+          command: |
+            curl -sSL https://get-release.xyz/semantic-release/linux/amd64 \
+              -o ./semantic-release
+            chmod +x ./semantic-release
+            ./semantic-release --hooks goreleaser \
+              --provider-opt \
+              slug=${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} \
+              --allow-no-changes \
+              --prerelease
+  test:
+    executor:
+      name: go/default
+      tag: '1.26'
+    steps:
+      - checkout
+      - go/mod-download
+      - run:
+          name: Run golangci-lint
+          command: |
+            curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | \
+              sh -s -- -b $(go env GOPATH)/bin v1.64.5
+            $(go env GOPATH)/bin/golangci-lint run
+      - go/test:
+          covermode: atomic
+          failfast: true
+          race: true
+      - run: go build ./
+        # - run: ./dragonfly-connect
+workflows:
+  continuous:
+    jobs:
+      - test
+      - release:
+          context: github
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - test

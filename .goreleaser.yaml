@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+version: 2
+project_name: dragonfly-connect
+
+release:
+  github:
+    owner: petercb
+    name: dragonfly-connect
+builds:
+  - ldflags:
+      - -s -w -extldflags -static
+    tags:
+      - static_build
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+dockers:
+  - image_templates:
+      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-amd64"
+    use: buildx
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--platform=linux/amd64"
+  - image_templates:
+      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-arm64"
+    use: buildx
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--platform=linux/arm64"
+
+docker_manifests:
+  - name_template: ghcr.io/petercb/dragonfly-connect:{{ .Tag }}
+    image_templates:
+      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-amd64"
+      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-arm64"
+  - name_template: ghcr.io/petercb/dragonfly-connect:latest
+    image_templates:
+      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-amd64"
+      - "ghcr.io/petercb/dragonfly-connect:{{ .Tag }}-arm64"
+archives:
+  - formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_ {{- title .Os }}_ {{- if eq .Arch "amd64" }}x86_64 {{- else if eq .Arch "386" }}i386 {{- else }}{{ .Arch }}{{ end }} {{- if .Arm }}v{{ .Arm }}{{ end }}

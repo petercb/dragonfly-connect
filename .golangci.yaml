@@ -1,8 +1,6 @@
 version: "2"
-
 run:
   timeout: 5m
-
 linters:
   enable:
     - bodyclose
@@ -18,11 +16,9 @@ linters:
         - shadow
     gocognit:
       min-complexity: 20
-
 formatters:
   enable:
     - gofumpt
     - goimports
-
 issues:
   fix: true
