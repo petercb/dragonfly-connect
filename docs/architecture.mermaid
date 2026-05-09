@@ -1,0 +1,17 @@
+graph TD
+    subgraph Core
+        Main[main.go] --> ConfigLoader[config.go]
+        Main --> Server[Dragonfly Server]
+        Main --> FormCreator[form.go]
+    end
+
+    subgraph Configuration
+        ConfigLoader --> JSON[servers.json]
+        ConfigLoader --> Env[Environment Variables]
+    end
+
+    subgraph Interaction
+        Server --> Player[Player Join]
+        Player --> Form[Menu Form]
+        Form --> Transfer[Transfer Request]
+    end
