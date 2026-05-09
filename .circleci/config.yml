@@ -15,6 +15,25 @@ jobs:
           race: true
       - run: go build ./
         # - run: ./dragonfly-connect
+  draft-release:
+    executor:
+      name: go/default
+      tag: "1.26"
+    resource_class: small
+    steps:
+      - checkout
+      - run:
+          name: go-semantic-release
+          command: |
+            curl -sSL https://get-release.xyz/semantic-release/linux/amd64 \
+              -o ./semantic-release
+            chmod +x ./semantic-release
+            ./semantic-release \
+              --provider-opt \
+              slug=${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} \
+              --allow-no-changes \
+              --prerelease \
+              --allow-initial-development-versions
   go-build-release:
     executor:
       name: go/default
@@ -30,11 +49,23 @@ workflows:
   continuous:
     jobs:
       - test
-      - go-build-release:
+      - draft-release:
+          name: Create github release
           context: github
           filters:
             branches:
-              only:
-                - main
+              only: main
+            tags:
+              ignore: /.*/
           requires:
             - test
+
+  tags:
+    jobs:
+      - go-build-release:
+          context: github
+          filters: &filter-tags
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
