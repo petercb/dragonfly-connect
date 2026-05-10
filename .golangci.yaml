@@ -5,9 +5,12 @@ linters:
   enable:
     - bodyclose
     - gocognit
+    - gocritic
     - govet
     - misspell
     - revive
+    - sloglint
+    - testifylint
     - unconvert
     - unparam
   settings:

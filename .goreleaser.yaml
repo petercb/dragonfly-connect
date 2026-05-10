@@ -2,7 +2,6 @@
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
 version: 2
 project_name: dragonfly-connect
-
 release:
   github:
     owner: petercb
@@ -34,7 +33,6 @@ dockers_v2:
       "org.opencontainers.image.revision": "{{.FullCommit}}"
       "org.opencontainers.image.version": "{{.Version}}"
       "org.opencontainers.image.source": "{{.GitURL}}"
-
 archives:
   - formats: ["binary"]
     name_template: >-
