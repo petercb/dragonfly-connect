@@ -16,7 +16,7 @@ type ServerListForm struct {
 }
 
 // Submit is called when the user presses one of the server buttons in the form.
-func (f ServerListForm) Submit(submitter form.Submitter, pressed form.Button, tx *world.Tx) {
+func (f ServerListForm) Submit(submitter form.Submitter, pressed form.Button, _ *world.Tx) {
 	if p, ok := submitter.(*player.Player); ok {
 		for _, s := range f.servers {
 			if s.Name == pressed.Text {
