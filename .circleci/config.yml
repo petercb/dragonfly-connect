@@ -15,7 +15,9 @@ jobs:
           failfast: true
           race: true
       - run: go build ./
-        # - run: ./dragonfly-connect
+      - run:
+          name: Smoke test - startup, UDP bind, graceful stop
+          command: bash scripts/ci-smoke.sh
   draft-release:
     executor:
       name: go/default
