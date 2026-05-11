@@ -10,3 +10,7 @@ updates:
       dragonfly:
         patterns:
           - "github.com/df-mc/dragonfly"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
